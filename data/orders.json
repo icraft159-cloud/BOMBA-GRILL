@@ -1,0 +1,57 @@
+{
+  "seq": {
+    "date": "2026-11-15",
+    "n": 1
+  },
+  "orders": [
+    {
+      "id": "4f8bd2f7-5e7e-4c5b-abd0-6639086e78bd",
+      "numero": "001",
+      "status": "novo",
+      "createdAt": "2026-11-15T00:24:40.748Z",
+      "updatedAt": "2026-11-15T00:24:40.748Z",
+      "customer": {
+        "nome": "ccc",
+        "telefone": "000000000000000",
+        "endereco": "kxkxk",
+        "complemento": "nxhx"
+      },
+      "payment": {
+        "metodo": "Pix",
+        "troco": ""
+      },
+      "notes": "",
+      "items": [
+        {
+          "produtoId": "p3",
+          "tipo": "produto",
+          "nome": "Costela no Bafo",
+          "qtd": 1,
+          "preco": 59.9,
+          "adicionais": [],
+          "observacoes": ""
+        }
+      ],
+      "totals": {
+        "subtotal": 59.9,
+        "deliveryFee": null,
+        "deliveryFeeText": "A combinar",
+        "total": 59.9
+      },
+      "history": [
+        {
+          "status": "novo",
+          "at": "2026-11-15T00:24:40.748Z"
+        }
+      ],
+      "delivery": {
+        "status": "aguardando",
+        "driver": null,
+        "acceptedAt": null,
+        "pickedUpAt": null,
+        "deliveredAt": null,
+        "history": []
+      }
+    }
+  ]
+}
