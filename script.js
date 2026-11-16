@@ -230,29 +230,69 @@ function montarMensagemPedido(dados, numero='') {
 }
 async function enviarPedidoWhatsApp(e) {
   e.preventDefault();
-  const dados={nome:$('checkoutNome').value.trim(),telefone:$('checkoutTelefone').value.trim(),endereco:$('checkoutEndereco').value.trim(),complemento:$('checkoutComplemento').value.trim(),pagamento:$('checkoutPagamento').value,troco:$('checkoutTroco').value.trim(),obsGeral:$('checkoutObs').value.trim()};
-  if(!dados.nome||!dados.telefone||!dados.endereco||!dados.pagamento){mostrarToast('Preencha todos os campos obrigatórios.','error');return}
-  if(!carrinho.length){mostrarToast('Carrinho vazio!','error');fecharCheckout();return}
-  const btn=$('sendOrderBtn'), original=btn.innerHTML;
-  btn.disabled=true; btn.innerHTML='Registrando pedido...';
-  let win=null;
+  const dados = {
+    nome: $('checkoutNome').value.trim(),
+    telefone: $('checkoutTelefone').value.trim(),
+    endereco: $('checkoutEndereco').value.trim(),
+    complemento: $('checkoutComplemento').value.trim(),
+    pagamento: $('checkoutPagamento').value,
+    troco: $('checkoutTroco').value.trim(),
+    obsGeral: $('checkoutObs').value.trim()
+  };
+  if (!dados.nome || !dados.telefone || !dados.endereco || !dados.pagamento) {
+    mostrarToast('Preencha todos os campos obrigatórios.', 'error');
+    return;
+  }
+  if (!carrinho.length) {
+    mostrarToast('Carrinho vazio!', 'error');
+    fecharCheckout();
+    return;
+  }
+
+  const enviarZap = $('enviarWhatsApp').checked;
+  const btn = $('sendOrderBtn');
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Registrando pedido...';
+
   try {
-    win=window.open('about:blank','_blank');
-    if(win) win.document.write('<title>BOMBA GRILL</title><p style="font-family:sans-serif;padding:24px">Registrando pedido e abrindo WhatsApp...</p>');
-    const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),12000);
-    const r=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(montarPayloadCozinha(dados)),signal:ctrl.signal});
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 12000);
+    const r = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(montarPayloadCozinha(dados)),
+      signal: ctrl.signal
+    });
     clearTimeout(t);
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(d.error||'Não foi possível registrar o pedido.');
-    const msg=montarMensagemPedido(dados,d.order.numero);
-    const url=`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
-    if(win&&!win.closed) win.location.href=url; else window.location.href=url;
-    carrinho=[]; salvarCarrinho(); atualizarCarrinhoUI(); $('checkoutForm').reset(); toggleTroco(); fecharCheckout();
-    mostrarToast(`Pedido #${d.order.numero} enviado para a cozinha! Toque em ENVIAR no WhatsApp.`,'success');
-  } catch(err) {
-    if(win&&!win.closed)win.close();
-    mostrarToast(err.message||'Erro ao enviar. Verifique se o servidor está ativo.','error');
-  } finally { btn.disabled=false; btn.innerHTML=original; }
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'Não foi possível registrar o pedido.');
+
+    const numeroPedido = d.order.numero;
+
+    if (enviarZap) {
+      const msg = montarMensagemPedido(dados, numeroPedido);
+      const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+      const win = window.open(url, '_blank');
+      if (!win || win.closed) window.location.href = url;
+      mostrarToast(`✅ Pedido #${numeroPedido} registrado e WhatsApp aberto!`, 'success');
+    } else {
+      mostrarToast(`✅ Pedido #${numeroPedido} registrado na cozinha com sucesso!`, 'success');
+    }
+
+    carrinho = [];
+    salvarCarrinho();
+    atualizarCarrinhoUI();
+    $('checkoutForm').reset();
+    $('enviarWhatsApp').checked = true;
+    toggleTroco();
+    fecharCheckout();
+  } catch (err) {
+    mostrarToast(err.message || 'Erro ao enviar. Verifique o servidor.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
 }
 
 /* ========== FAQ / MENU / TOAST ========== */

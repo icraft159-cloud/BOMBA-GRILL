@@ -1,6 +1,6 @@
 {
   "seq": {
-    "date": "2026-11-15",
+    "date": "2026-11-16",
     "n": 1
   },
   "orders": [
@@ -42,6 +42,55 @@
         {
           "status": "novo",
           "at": "2026-11-15T00:24:40.748Z"
+        }
+      ],
+      "delivery": {
+        "status": "aguardando",
+        "driver": null,
+        "acceptedAt": null,
+        "pickedUpAt": null,
+        "deliveredAt": null,
+        "history": []
+      }
+    },
+    {
+      "id": "b8da550b-a381-4c38-847e-af19b46d56fe",
+      "numero": "001",
+      "status": "novo",
+      "createdAt": "2026-11-16T23:34:03.522Z",
+      "updatedAt": "2026-11-16T23:34:03.522Z",
+      "customer": {
+        "nome": "iannê souza fontenele",
+        "telefone": "+5588992330500",
+        "endereco": "Rua Fontenele Sobrinho, 431",
+        "complemento": "casa"
+      },
+      "payment": {
+        "metodo": "Pix",
+        "troco": ""
+      },
+      "notes": "",
+      "items": [
+        {
+          "produtoId": "p2",
+          "tipo": "produto",
+          "nome": "Frango ao Molho Madeira",
+          "qtd": 1,
+          "preco": 39.9,
+          "adicionais": [],
+          "observacoes": ""
+        }
+      ],
+      "totals": {
+        "subtotal": 39.9,
+        "deliveryFee": null,
+        "deliveryFeeText": "A combinar",
+        "total": 39.9
+      },
+      "history": [
+        {
+          "status": "novo",
+          "at": "2026-11-16T23:34:03.522Z"
         }
       ],
       "delivery": {
